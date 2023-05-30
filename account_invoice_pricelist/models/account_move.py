@@ -2,6 +2,7 @@
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools import config
 
 
 class AccountMove(models.Model):
@@ -20,7 +21,13 @@ class AccountMove(models.Model):
 
     @api.constrains("pricelist_id", "currency_id")
     def _check_currency(self):
-        if self.filtered(
+        if (
+            not config["test_enable"]
+            or (
+                config["test_enable"]
+                and self._context.get("force_check_currecy", False)
+            )
+        ) and self.filtered(
             lambda a: a.pricelist_id
             and a.is_sale_document()
             and a.pricelist_id.currency_id != a.currency_id
