@@ -306,7 +306,9 @@ class TestAccountMovePricelist(common.TransactionCase):
 
     def test_check_currency(self):
         with self.assertRaises(UserError):
-            self.invoice.write(
+            self.invoice.with_context(force_check_currecy=True).write(
                 {"pricelist_id": self.sale_pricelist_with_discount_in_euros.id}
             )
-            self.invoice.write({"currency_id": self.usd_currency.id})
+            self.invoice.with_context(force_check_currecy=True).write(
+                {"currency_id": self.usd_currency.id}
+            )
