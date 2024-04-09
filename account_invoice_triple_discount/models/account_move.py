@@ -16,7 +16,7 @@ class AccountMove(models.Model):
         restored after the original process is done
         """
         old_values_by_line_id = {}
-        lines = self.invoice_line_ids or self.line_ids
+        lines = self.line_ids
         digits = lines._fields["price_unit"]._digits
         lines._fields["price_unit"]._digits = (16, 16)
         for line in lines:
